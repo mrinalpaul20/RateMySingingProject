@@ -36,6 +36,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         return list.size();
     }
 
+    public void updateList(ArrayList<Data> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textName;
         TextView textAge;

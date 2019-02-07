@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     DatabaseReference databaseReference;
-
+    RecyclerAdapter recyclerAdapter;
+    ArrayList<Data> arrayList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerAdapter = new RecyclerAdapter(arrayList);
+        recyclerView.setAdapter(recyclerAdapter);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 for(DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Data data = dataSnapshot1.getValue(Data.class);
                     list.add(data);
-                    showData(list);
+                    recyclerAdapter.updateList(list);
                 }
             }
 
@@ -44,10 +47,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void showData(ArrayList<Data> list) {
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(list);
-        recyclerView.setAdapter(recyclerAdapter);
     }
 }
